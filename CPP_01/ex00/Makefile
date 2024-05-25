@@ -1,6 +1,6 @@
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
-TARGET = Zombie
+TARGET = ex00
 SRCS = newZombie.cpp Zombie.cpp main.cpp randomChump.cpp
 
 all: $(TARGET)

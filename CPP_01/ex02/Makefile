@@ -1,6 +1,6 @@
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
-TARGET = Zombie
+TARGET = ex02
 SRCS = main.cpp
 
 all: $(TARGET)
