@@ -1,7 +1,7 @@
-CC = g++
+CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 TARGET = Zombie
-SRCS = Zombie.cpp main.cpp
+SRCS = newZombie.cpp Zombie.cpp main.cpp randomChump.cpp
 
 all: $(TARGET)
 

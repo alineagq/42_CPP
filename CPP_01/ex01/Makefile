@@ -1,7 +1,7 @@
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
-TARGET = megaphone
-SRCS = megaphone.cpp
+TARGET = Zombie
+SRCS = Zombie.cpp main.cpp zombieHorde.cpp
 
 all: $(TARGET)
 

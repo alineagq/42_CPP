@@ -1,7 +1,7 @@
 CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98
-TARGET = megaphone
-SRCS = megaphone.cpp
+TARGET = ex03
+SRCS = main.cpp HumanA.cpp HumanB.cpp Weapon.cpp
 
 all: $(TARGET)
 

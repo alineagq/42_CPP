@@ -25,7 +25,8 @@ void PhoneBook::add_contact()
         }
         num_contacts--;
     }
-    contacts[num_contacts++] = Contact(first, last, nick, phone, secret);
+
+    contacts[num_contacts] = Contact(first, last, nick, phone, secret);
 }
 
 std::string PhoneBook::get_input(const std::string& prompt) const
@@ -74,8 +75,8 @@ void PhoneBook::search_contact() const
     else
     {
         std::cout << "Invalid index." << std::endl;
-        std::cin.clear();
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        // std::cin.clear();
+        // std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 }
 

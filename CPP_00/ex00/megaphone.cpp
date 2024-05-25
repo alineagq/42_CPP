@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-void	printUpperCase(const std::string &word)
+void	print_uppercase(const std::string &word)
 {
 	for (std::string::const_iterator it = word.begin(); it != word.end(); ++it)
 		std::cout << static_cast<char>(std::toupper(*it));
@@ -17,7 +17,7 @@ int	main(int argc, char **argv)
 		for (int i = 1; i < argc; ++i)
 		{
 			std::string word(argv[i]);
-			printUpperCase(word);
+			print_uppercase(word);
 			std::cout << " ";
 		}
 		std::cout << std::endl;
