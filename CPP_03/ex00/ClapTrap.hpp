@@ -21,7 +21,6 @@ public:
     void takeDamage(unsigned int amount);
     void beRepaired(unsigned int amount);
 
-    // Getters for testing and debugging purposes
     const std::string &getName() const;
     int getHitPoints() const;
     int getEnergyPoints() const;

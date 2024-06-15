@@ -1,19 +1,13 @@
-# Compiler
 CXX = c++
 
-# Compiler flags
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-# Source files
 SRCS = main.cpp ClapTrap.cpp ScavTrap.cpp FragTrap.cpp
 
-# Object files
 OBJS = $(SRCS:.cpp=.o)
 
-# Executable name
 TARGET = robotgame
 
-# Rules
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
@@ -30,5 +24,4 @@ fclean: clean
 
 re: fclean all
 
-# Phony targets
 .PHONY: all clean fclean re

@@ -14,12 +14,10 @@ int main() {
     scav.beRepaired(20);
     scav.guardGate();
 
-    // Testing boundary conditions
     scav.takeDamage(100);
     scav.beRepaired(5);
     scav.attack("target");
 
-    // Additional test cases
     ScavTrap copy(scav);
     ScavTrap assigned("Assigned");
     assigned = scav;
