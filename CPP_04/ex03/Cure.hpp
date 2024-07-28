@@ -13,4 +13,4 @@ public:
     void use(ICharacter& target);
 };
 
-#endif // CURE_HPP
+#endif

@@ -16,4 +16,4 @@ public:
     AMateria* createMateria(std::string const & type);
 };
 
-#endif // MATERIASOURCE_HPP
+#endif

@@ -19,4 +19,4 @@ public:
     void use(int idx, ICharacter& target);
 };
 
-#endif // CHARACTER_HPP
+#endif

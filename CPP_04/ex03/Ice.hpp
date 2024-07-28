@@ -13,4 +13,4 @@ public:
     void use(ICharacter& target);
 };
 
-#endif // ICE_HPP
+#endif
