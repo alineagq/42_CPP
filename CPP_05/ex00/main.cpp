@@ -6,7 +6,7 @@ int main()
     {
         Bureaucrat b1("Alice", 1);
         std::cout << b1;
-        b1.incrementGrade(); // This should throw an exception
+        b1.incrementGrade();
     }
     catch (std::exception &e)
     {
@@ -17,7 +17,7 @@ int main()
     {
         Bureaucrat b2("Bob", 150);
         std::cout << b2;
-        b2.decrementGrade(); // This should throw an exception
+        b2.decrementGrade();
     }
     catch (std::exception &e)
     {
