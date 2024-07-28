@@ -41,4 +41,4 @@ private:
 
 std::ostream &operator<<(std::ostream &out, const Form &f);
 
-#endif // FORM_HPP
+#endif
