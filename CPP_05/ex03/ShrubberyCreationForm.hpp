@@ -17,4 +17,4 @@ private:
     std::string target;
 };
 
-#endif // SHRUBBERYCREATIONFORM_HPP
+#endif

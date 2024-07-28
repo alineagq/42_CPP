@@ -17,4 +17,4 @@ private:
     std::string target;
 };
 
-#endif // ROBOTOMYREQUESTFORM_HPP
+#endif

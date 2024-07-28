@@ -17,4 +17,4 @@ private:
     std::string target;
 };
 
-#endif // PRESIDENTIALPARDONFORM_HPP
+#endif
