@@ -5,27 +5,27 @@
 #include "WrongCat.hpp"
 
 int main() {
-    const Animal* meta = new Animal();
-    const Animal* j = new Dog();
-    const Animal* i = new Cat();
-    std::cout << j->getType() << " " << std::endl;
-    std::cout << i->getType() << " " << std::endl;
-    i->makeSound(); // will output the cat sound!
-    j->makeSound(); // will output the dog sound!
-    meta->makeSound(); // will output the generic animal sound
+    const Animal* animal = new Animal();
+    const Animal* caramel = new Dog();
+    const Animal* pawers = new Cat();
+    std::cout << caramel->getType() << " " << std::endl;
+    std::cout << pawers->getType() << " " << std::endl;
+    pawers->makeSound();
+    caramel->makeSound();
+    animal->makeSound();
 
-    delete meta;
-    delete j;
-    delete i;
+    delete animal;
+    delete caramel;
+    delete pawers;
 
-    const WrongAnimal* wrongMeta = new WrongAnimal();
-    const WrongAnimal* wrongI = new WrongCat();
-    std::cout << wrongI->getType() << " " << std::endl;
-    wrongI->makeSound(); // will output the wrong animal sound
-    wrongMeta->makeSound(); // will output the wrong animal sound
+    const WrongAnimal* wrongAnimal = new WrongAnimal();
+    const WrongAnimal* wrongpaw = new WrongCat();
+    std::cout << wrongpaw->getType() << " " << std::endl;
+    wrongpaw->makeSound();
+    wrongAnimal->makeSound();
 
-    delete wrongMeta;
-    delete wrongI;
+    delete wrongAnimal;
+    delete wrongpaw;
 
     return 0;
 }
