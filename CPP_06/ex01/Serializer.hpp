@@ -10,4 +10,4 @@ public:
     static Data* deserialize(uintptr_t raw);
 };
 
-#endif // SERIALIZER_HPP
+#endif
