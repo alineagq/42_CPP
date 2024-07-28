@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <sstream>
 #include <limits>
+#include <cmath>
 
 void ScalarConverter::convert(const std::string &literal)
 {

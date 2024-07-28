@@ -15,4 +15,4 @@ private:
     static double toDouble(const std::string &literal);
 };
 
-#endif // SCALARCONVERTER_HPP
+#endif
