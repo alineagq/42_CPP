@@ -12,8 +12,8 @@ public:
     AAnimal(const AAnimal &other);
     AAnimal& operator=(const AAnimal &other);
     virtual ~AAnimal();
-    virtual void makeSound() const = 0; // Pure virtual function
+    virtual void makeSound() const = 0;
     std::string getType() const;
 };
 
-#endif // AANIMAL_HPP
+#endif

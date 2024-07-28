@@ -15,4 +15,4 @@ public:
     void makeSound() const override;
 };
 
-#endif // DOG_HPP
+#endif

@@ -12,7 +12,7 @@ public:
     Cat(const Cat &other);
     Cat& operator=(const Cat &other);
     virtual ~Cat();
-    void makeSound() const override;
+    void makeSound() const;
 };
 
-#endif // CAT_HPP
+#endif
