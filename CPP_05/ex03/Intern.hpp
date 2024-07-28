@@ -21,4 +21,4 @@ private:
     AForm *createForm(const std::string &formName, const std::string &target);
 };
 
-#endif // INTERN_HPP
+#endif
