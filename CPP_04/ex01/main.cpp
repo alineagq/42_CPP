@@ -17,7 +17,6 @@ int main() {
         delete animals[i];
     }
 
-    // Test deep copy
     Dog dog1;
     Dog dog2(dog1);
     Dog dog3;

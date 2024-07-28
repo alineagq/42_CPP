@@ -14,4 +14,4 @@ public:
     ~Brain();
 };
 
-#endif // BRAIN_HPP
+#endif

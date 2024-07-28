@@ -16,4 +16,4 @@ public:
     std::string getType() const;
 };
 
-#endif // ANIMAL_HPP
+#endif
