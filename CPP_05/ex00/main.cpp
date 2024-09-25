@@ -5,6 +5,8 @@ int main()
     try
     {
         Bureaucrat b1("Alice", 1);
+        std::cout << b1.getGrade() << std::endl;
+        std::cout << b1.getName() << std::endl;
         std::cout << b1;
         b1.incrementGrade();
     }

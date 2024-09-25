@@ -6,7 +6,13 @@ int main()
     try
     {
         Bureaucrat b1("Alice", 1);
+        std::cout << b1.getName() << std::endl;
+        std::cout << b1.getGrade() << std::endl;
         Form f1("Form1", 1, 50);
+        std::cout << f1.getName() << std::endl;
+        std::cout << f1.isSigned() << std::endl;
+        std::cout << f1.getGradeToSign() << std::endl;
+        std::cout << f1.getGradeToExecute() << std::endl;
         std::cout << b1;
         std::cout << f1;
         b1.signForm(f1);

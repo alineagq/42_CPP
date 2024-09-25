@@ -30,15 +30,16 @@ void ShrubberyCreationForm::execute(Bureaucrat const &executor) const
     if (executor.getGrade() > getGradeToExecute())
         throw AForm::GradeTooLowException();
 
-    std::ofstream outfile(target + "_shrubbery");
+    // Convert std::string to const char* using .c_str()
+    std::ofstream outfile((target + "_shrubbery").c_str());
     outfile << "       _-_\n"
-               "    /~~   ~~\\\n"
-               " /~~         ~~\\\n"
+               "    /~~   ~~\n"
+               " /~~         ~~\n"
                "{               }\n"
                " \\  _-     -_  /\n"
                "   ~  \\ //  ~\n"
                "_- -   | | _- _\n"
                "  _ -  | |   -_\n"
-               "      // \\\n";
+               "      // \n";
     outfile.close();
 }
