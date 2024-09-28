@@ -1,5 +1,11 @@
 #include "Intern.hpp"
 
+struct FormCreationMapping
+{
+    std::string formName;
+    AForm *(Intern::*createFormPtr)(const std::string &target);
+};
+
 Intern::Intern() {}
 
 Intern::Intern(const Intern &other)
@@ -15,26 +21,41 @@ Intern &Intern::operator=(const Intern &other)
 
 Intern::~Intern() {}
 
-AForm *Intern::makeForm(const std::string &formName, const std::string &target)
+// Refactored createForm to use function pointers.
+AForm *Intern::createFormShrubbery(const std::string &target)
 {
-    AForm *form = createForm(formName, target);
-
-    if (form)
-        std::cout << "Intern creates " << formName << std::endl;
-    else
-        std::cout << "Error: Form " << formName << " creation failed." << std::endl;
-
-    return form;
+    return new ShrubberyCreationForm(target);
 }
 
-AForm *Intern::createForm(const std::string &formName, const std::string &target)
+AForm *Intern::createFormRobotomy(const std::string &target)
 {
-    if (formName == "shrubbery creation")
-        return new ShrubberyCreationForm(target);
-    else if (formName == "robotomy request")
-        return new RobotomyRequestForm(target);
-    else if (formName == "presidential pardon")
-        return new PresidentialPardonForm(target);
-    else
-        return nullptr;
+    return new RobotomyRequestForm(target);
+}
+
+AForm *Intern::createFormPardon(const std::string &target)
+{
+    return new PresidentialPardonForm(target);
+}
+
+AForm *Intern::makeForm(const std::string &formName, const std::string &target)
+{
+    FormCreationMapping formMappings[] = {
+        {"shrubbery creation", &Intern::createFormShrubbery},
+        {"robotomy request", &Intern::createFormRobotomy},
+        {"presidential pardon", &Intern::createFormPardon}};
+
+    const int formCount = sizeof(formMappings) / sizeof(formMappings[0]);
+
+    for (int i = 0; i < formCount; ++i)
+    {
+        if (formName == formMappings[i].formName)
+        {
+            AForm *form = (this->*formMappings[i].createFormPtr)(target); // Call the corresponding member function.
+            std::cout << "Intern creates " << formName << std::endl;
+            return form;
+        }
+    }
+
+    std::cout << "Error: Form " << formName << " creation failed." << std::endl;
+    return NULL;
 }

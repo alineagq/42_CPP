@@ -5,6 +5,8 @@
 #include <iostream>
 #include "AForm.hpp"
 
+class AForm;
+
 class Bureaucrat
 {
 public:
