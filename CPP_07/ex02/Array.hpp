@@ -1,41 +1,49 @@
 #ifndef ARRAY_HPP
 #define ARRAY_HPP
 
-#include <cstddef> // for size_t
-#include <stdexcept> // for std::out_of_range
+#include <exception>
 
-template<typename T>
+template <typename T>
 class Array {
 private:
-    T* m_data;
-    size_t m_size;
+    T* elements;
+    unsigned int length;
 
 public:
-    // Default constructor
-    Array();
+    Array() : elements(NULL), length(0) {}
 
-    // Parameterized constructor
-    explicit Array(size_t n);
+    Array(unsigned int n) : elements(new T[n]()), length(n) {}
 
-    // Copy constructor
-    Array(const Array<T>& other);
+    Array(const Array& other) : elements(NULL), length(0) {
+        *this = other;
+    }
 
-    // Assignment operator
-    Array<T>& operator=(const Array<T>& other);
+    ~Array() {
+        delete[] elements;
+    }
 
-    // Destructor
-    ~Array();
+    Array& operator=(const Array& other) {
+        if (this != &other) {
+            delete[] elements;
+            length = other.length;
+            elements = new T[length];
+            for (unsigned int i = 0; i < length; ++i) {
+                elements[i] = other.elements[i];
+            }
+        }
+        return *this;
+    }
 
-    // Subscript operator
-    T& operator[](size_t index);
+    T& operator[](unsigned int index) {
+        if (index >= length) {
+            throw std::out_of_range("Index out of bounds");
+        }
+        return elements[index];
+    }
 
-    // Const subscript operator
-    const T& operator[](size_t index) const;
-
-    // Member function to get the size
-    size_t size() const;
+    unsigned int size() const {
+        return length;
+    }
 };
 
-#include "Array.tpp"
-
-#endif // ARRAY_HPP
+#endif

@@ -1,37 +1,26 @@
 #include <iostream>
 #include "iter.hpp"
 
-// Example function templates to be used with iter
-template <typename T>
-void printElement(T &element) {
-    std::cout << element << " ";
+void printInt(int& x) {
+    std::cout << x << " ";
 }
 
-template <typename T>
-void squareElement(T &element) {
-    element *= element;
+void increment(int& x) {
+    x += 1;
 }
 
 int main() {
-    int intArray[] = {1, 2, 3, 4, 5};
-    double doubleArray[] = {1.1, 2.2, 3.3, 4.4, 5.5};
-    char charArray[] = {'a', 'b', 'c', 'd', 'e'};
+    int arr[] = {1, 2, 3, 4, 5};
+    size_t length = sizeof(arr) / sizeof(arr[0]);
 
-    std::cout << "Printing intArray:" << std::endl;
-    iter(intArray, 5, printElement<int>);
+    std::cout << "Array before increment: ";
+    iter(arr, length, printInt);
     std::cout << std::endl;
 
-    std::cout << "Printing doubleArray:" << std::endl;
-    iter(doubleArray, 5, printElement<double>);
-    std::cout << std::endl;
+    iter(arr, length, increment);
 
-    std::cout << "Printing charArray:" << std::endl;
-    iter(charArray, 5, printElement<char>);
-    std::cout << std::endl;
-
-    std::cout << "Squaring elements in intArray:" << std::endl;
-    iter(intArray, 5, squareElement<int>);
-    iter(intArray, 5, printElement<int>);
+    std::cout << "Array after increment: ";
+    iter(arr, length, printInt);
     std::cout << std::endl;
 
     return 0;

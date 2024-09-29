@@ -1,4 +1,4 @@
-CXX = g++
+CXX = c++
 CXXFLAGS = -std=c++98 -Wall -Wextra -Werror
 
 all: main
@@ -11,3 +11,5 @@ main.o: main.cpp whatever.hpp
 
 clean:
 	rm -f main main.o
+
+re: clean all
