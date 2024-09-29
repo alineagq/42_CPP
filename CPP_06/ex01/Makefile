@@ -1,10 +1,22 @@
-CXX = g++
+CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-all: serializer_test
+NAME = ex01
 
-serializer_test: main.cpp Serializer.cpp Data.cpp
-    $(CXX) $(CXXFLAGS) $^ -o $@
+SRCS = main.cpp Data.cpp Serializer.cpp
+OBJS = $(SRCS:.cpp=.o)
+
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJS)
 
 clean:
-    rm -f serializer_test
+	rm -f $(OBJS)
+
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re

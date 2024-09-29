@@ -1,10 +1,22 @@
-CXX = g++
+CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-all: identify_test
+NAME = ex02
 
-identify_test: main.cpp Base.cpp A.cpp B.cpp C.cpp
-    $(CXX) $(CXXFLAGS) $^ -o $@
+SRCS = main.cpp Base.cpp
+OBJS = $(SRCS:.cpp=.o)
+
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJS)
 
 clean:
-    rm -f identify_test
+	rm -f $(OBJS)
+
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re

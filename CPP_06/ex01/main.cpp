@@ -4,22 +4,14 @@
 
 int main()
 {
-    Data* dataPtr = new Data(42, 4.2);
+    Data originalData(42, 3.14);
+    
+    uintptr_t raw = Serializer::serialize(&originalData);
+    
+    Data* deserializedData = Serializer::deserialize(raw);
 
-    uintptr_t serialized = Serializer::serialize(dataPtr);
-
-    Data* deserializedPtr = Serializer::deserialize(serialized);
-
-    if (deserializedPtr == dataPtr)
-    {
-        std::cout << "Serialization and deserialization successful!" << std::endl;
-    }
-    else
-    {
-        std::cout << "Serialization and deserialization failed!" << std::endl;
-    }
-
-    delete dataPtr;
+    std::cout << "Original Data: value = " << originalData.value << ", score = " << originalData.score << std::endl;
+    std::cout << "Deserialized Data: value = " << deserializedData->value << ", score = " << deserializedData->score << std::endl;
 
     return 0;
 }

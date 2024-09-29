@@ -4,8 +4,7 @@
 #include "Base.hpp"
 
 class B : public Base {
-public:
-    ~B() override {}
+    // Classe vazia herdando de Base
 };
 
-#endif // B_HPP
+#endif

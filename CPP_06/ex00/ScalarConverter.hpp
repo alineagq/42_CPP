@@ -9,6 +9,7 @@ public:
     static void convert(const std::string &literal);
 
 private:
+    ScalarConverter() {}
     static char toChar(const std::string &literal);
     static int toInt(const std::string &literal);
     static float toFloat(const std::string &literal);
