@@ -1,19 +1,19 @@
-#ifndef SCALARCONVERTER_HPP
-#define SCALARCONVERTER_HPP
-
+#pragma once
+#include <iostream>
 #include <string>
 
-class ScalarConverter
-{
+class ScalarConverter {
 public:
-    static void convert(const std::string &literal);
+    // Static method to convert the scalar value
+    static void convert(const std::string& literal);
 
 private:
-    ScalarConverter() {}
-    static char toChar(const std::string &literal);
-    static int toInt(const std::string &literal);
-    static float toFloat(const std::string &literal);
-    static double toDouble(const std::string &literal);
-};
+    // Private constructor to prevent instantiation
+    ScalarConverter();
 
-#endif
+    // Helper methods for conversion
+    static void convertToChar(double value);
+    static void convertToInt(double value);
+    static void convertToFloat(double value);
+    static void convertToDouble(double value);
+};

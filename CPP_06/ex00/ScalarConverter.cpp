@@ -1,93 +1,56 @@
 #include "ScalarConverter.hpp"
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <limits>
+#include <cstdlib>
 #include <cmath>
+#include <limits>
+#include <iomanip>
 
-void ScalarConverter::convert(const std::string &literal)
-{
-    // Convert to char
-    try {
-        char charValue = toChar(literal);
-        std::cout << "char: ";
-        if (std::isprint(static_cast<unsigned char>(charValue)))
-            std::cout << "'" << charValue << "'" << std::endl;
-        else
-            std::cout << "Non displayable" << std::endl;
-    } catch (const std::exception &e) {
+ScalarConverter::ScalarConverter() {}
+
+void ScalarConverter::convert(const std::string& literal) {
+    double value = std::strtod(literal.c_str(), NULL);
+
+    convertToChar(value);
+    convertToInt(value);
+    convertToFloat(value);
+    convertToDouble(value);
+}
+
+void ScalarConverter::convertToChar(double value) {
+    if (std::isnan(value) || value < std::numeric_limits<char>::min() || value > std::numeric_limits<char>::max()) {
         std::cout << "char: impossible" << std::endl;
+    } else if (!std::isprint(static_cast<char>(value))) {
+        std::cout << "char: Non displayable" << std::endl;
+    } else {
+        std::cout << "char: '" << static_cast<char>(value) << "'" << std::endl;
     }
+}
 
-    // Convert to int
-    try {
-        int intValue = toInt(literal);
-        std::cout << "int: " << intValue << std::endl;
-    } catch (const std::exception &e) {
+void ScalarConverter::convertToInt(double value) {
+    if (std::isnan(value) || value < std::numeric_limits<int>::min() || value > std::numeric_limits<int>::max()) {
         std::cout << "int: impossible" << std::endl;
-    }
-
-    // Convert to float
-    try {
-        float floatValue = toFloat(literal);
-        std::cout << "float: ";
-        if (std::isnan(floatValue) || std::isinf(floatValue))
-            std::cout << floatValue << "f" << std::endl;
-        else
-            std::cout << std::fixed << std::setprecision(1) << floatValue << "f" << std::endl;
-    } catch (const std::exception &e) {
-        std::cout << "float: impossible" << std::endl;
-    }
-
-    // Convert to double
-    try {
-        double doubleValue = toDouble(literal);
-        std::cout << "double: ";
-        if (std::isnan(doubleValue) || std::isinf(doubleValue))
-            std::cout << doubleValue << std::endl;
-        else
-            std::cout << std::fixed << std::setprecision(1) << doubleValue << std::endl;
-    } catch (const std::exception &e) {
-        std::cout << "double: impossible" << std::endl;
+    } else {
+        std::cout << "int: " << static_cast<int>(value) << std::endl;
     }
 }
 
-char ScalarConverter::toChar(const std::string &literal)
-{
-    try {
-        int intValue = toInt(literal);
-        if (intValue >= std::numeric_limits<char>::min() && intValue <= std::numeric_limits<char>::max())
-            return static_cast<char>(intValue);
-        else
-            throw std::invalid_argument("Invalid char literal");
-    } catch (...) {
-        throw std::invalid_argument("Invalid char literal");
+void ScalarConverter::convertToFloat(double value) {
+    std::cout << std::fixed << std::setprecision(1);
+    if (std::isnan(value)) {
+        std::cout << "float: nanf" << std::endl;
+    } else if (std::isinf(value)) {
+        std::cout << "float: " << (value > 0 ? "+inff" : "-inff") << std::endl;
+    } else {
+        std::cout << "float: " << static_cast<float>(value) << "f" << std::endl;
     }
 }
 
-int ScalarConverter::toInt(const std::string &literal)
-{
-    std::stringstream ss(literal);
-    int value;
-    if (!(ss >> value))
-        throw std::invalid_argument("Invalid int literal");
-    return static_cast<int>(value); // Explicit static_cast to int
-}
-
-float ScalarConverter::toFloat(const std::string &literal)
-{
-    std::stringstream ss(literal);
-    float value;
-    if (!(ss >> value))
-        throw std::invalid_argument("Invalid float literal");
-    return static_cast<float>(value);
-}
-
-double ScalarConverter::toDouble(const std::string &literal)
-{
-    std::stringstream ss(literal);
-    double value;
-    if (!(ss >> value))
-        throw std::invalid_argument("Invalid double literal");
-    return static_cast<double>(value);
+void ScalarConverter::convertToDouble(double value) {
+    std::cout << std::fixed << std::setprecision(1);
+    if (std::isnan(value)) {
+        std::cout << "double: nan" << std::endl;
+    } else if (std::isinf(value)) {
+        std::cout << "double: " << (value > 0 ? "+inf" : "-inf") << std::endl;
+    } else {
+        std::cout << "double: " << static_cast<double>(value) << std::endl;
+    }
 }
