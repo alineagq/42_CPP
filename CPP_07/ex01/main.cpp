@@ -1,27 +1,34 @@
 #include <iostream>
 #include "iter.hpp"
 
-void printInt(int& x) {
-    std::cout << x << " ";
+class Awesome
+{
+  public:
+    Awesome( void ) : _n( 42 ) { return; }
+    int get( void ) const { return this->_n; }
+  private:
+    int _n;
+};
+
+std::ostream & operator<<( std::ostream & o, Awesome const & rhs )
+{
+  o << rhs.get();
+  return o;
 }
 
-void increment(int& x) {
-    x += 1;
+template< typename T >
+void print( T& x )
+{
+  std::cout << x << std::endl;
+  return;
 }
 
 int main() {
-    int arr[] = {1, 2, 3, 4, 5};
-    size_t length = sizeof(arr) / sizeof(arr[0]);
+  int tab[] = { 0, 1, 2, 3, 4 };
+  Awesome tab2[5];
 
-    std::cout << "Array before increment: ";
-    iter(arr, length, printInt);
-    std::cout << std::endl;
+  iter( tab, 5, print<const int> );
+  iter( tab2, 5, print<Awesome> );
 
-    iter(arr, length, increment);
-
-    std::cout << "Array after increment: ";
-    iter(arr, length, printInt);
-    std::cout << std::endl;
-
-    return 0;
+  return 0;
 }
