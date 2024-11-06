@@ -14,7 +14,7 @@ typename T::iterator easyfind(T &container, int val) {
         }
     }
 
-    throw std::exception(); // or custom exception/error handling as needed
+    throw std::exception();
 }
 
 #endif // EASYFIND_HPP
