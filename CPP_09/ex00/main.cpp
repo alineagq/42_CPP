@@ -19,7 +19,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    bitcoinExchange.processData();
+    bitcoinExchange.processData(inputFile);  // Pass the inputFile as the argument
 
     return 0;
 }

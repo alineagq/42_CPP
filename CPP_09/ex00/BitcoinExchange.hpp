@@ -11,7 +11,7 @@ public:
     ~BitcoinExchange();
 
     bool loadData(const std::string& filename);
-    void processData();
+    void processData(const std::string& inputFile);
 
 private:
     struct PriceData {
