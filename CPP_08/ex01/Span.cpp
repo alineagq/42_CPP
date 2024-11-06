@@ -1,11 +1,14 @@
 #include "Span.hpp"
+#include <algorithm> // for std::sort, std::minmax_element
+#include <stdexcept> // for std::runtime_error
+#include <limits>    // for std::numeric_limits
 
 Span::Span(unsigned int N) : _maxSize(N) {
-    _numbers.reserve(N); // Reserve memory for N elements
+    _numbers.reserve(N); // Pre-allocating capacity
 }
 
 void Span::addNumber(int number) {
-    checkSize();
+    checkSize(); // Ensure capacity before adding
     _numbers.push_back(number);
 }
 
@@ -17,7 +20,7 @@ int Span::shortestSpan() {
     std::sort(sortedNumbers.begin(), sortedNumbers.end());
 
     int shortest = std::numeric_limits<int>::max();
-    for (size_t i = 1; i < sortedNumbers.size(); ++i) {
+    for (std::vector<int>::size_type i = 1; i < sortedNumbers.size(); ++i) {
         int span = sortedNumbers[i] - sortedNumbers[i - 1];
         if (span < shortest) {
             shortest = span;
@@ -30,14 +33,19 @@ int Span::longestSpan() {
     if (_numbers.size() < 2)
         throw std::runtime_error("Cannot find longest span with less than 2 elements");
 
-    auto minmax = std::minmax_element(_numbers.begin(), _numbers.end());
-    return *minmax.second - *minmax.first;
+    int minVal = *std::min_element(_numbers.begin(), _numbers.end());
+    int maxVal = *std::max_element(_numbers.begin(), _numbers.end());
+    
+    return maxVal - minVal;
 }
 
+
 void Span::addRange(std::vector<int>::iterator begin, std::vector<int>::iterator end) {
-    checkSize();
+    std::vector<int>::size_type rangeSize = std::distance(begin, end);
+    if (_numbers.size() + rangeSize > _maxSize)
+        throw std::runtime_error("Adding range would exceed Span's capacity");
+    
     _numbers.insert(_numbers.end(), begin, end);
-    checkSize();
 }
 
 void Span::checkSize() {

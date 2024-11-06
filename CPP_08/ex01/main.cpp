@@ -1,28 +1,27 @@
 #include <iostream>
-#include <vector>
 #include "Span.hpp"
 
 int main() {
-    Span sp = Span(5);
-
-    // Adding numbers one by one
+    Span sp(5);
     sp.addNumber(6);
     sp.addNumber(3);
     sp.addNumber(17);
     sp.addNumber(9);
     sp.addNumber(11);
 
-    // Testing shortestSpan and longestSpan
-    std::cout << "Shortest span: " << sp.shortestSpan() << std::endl;
-    std::cout << "Longest span: " << sp.longestSpan() << std::endl;
+    std::cout << "Shortest Span: " << sp.shortestSpan() << std::endl;
+    std::cout << "Longest Span: " << sp.longestSpan() << std::endl;
 
-    // Adding a range of numbers
-    std::vector<int> numbersToAdd = {1, 5, 8, 2};
-    sp.addRange(numbersToAdd.begin(), numbersToAdd.end());
+    // Additional test for addRange with 10,000 numbers
+    Span bigSpan(10000);
+    std::vector<int> largeSet(10000);
+    for (int i = 0; i < 10000; ++i) {
+        largeSet[i] = i;
+    }
+    bigSpan.addRange(largeSet.begin(), largeSet.end());
 
-    // Testing again after adding more numbers
-    std::cout << "Shortest span after range addition: " << sp.shortestSpan() << std::endl;
-    std::cout << "Longest span after range addition: " << sp.longestSpan() << std::endl;
+    std::cout << "Shortest Span in bigSpan: " << bigSpan.shortestSpan() << std::endl;
+    std::cout << "Longest Span in bigSpan: " << bigSpan.longestSpan() << std::endl;
 
     return 0;
 }
