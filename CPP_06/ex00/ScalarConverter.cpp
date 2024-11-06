@@ -3,11 +3,19 @@
 #include <cmath>
 #include <limits>
 #include <iomanip>
+#include <iostream>
+#include <stdexcept>
 
 ScalarConverter::ScalarConverter() {}
 
 void ScalarConverter::convert(const std::string& literal) {
-    double value = std::strtod(literal.c_str(), NULL);
+    double value;
+    
+    if (std::isprint(literal[0]) && !std::isdigit(literal[0])) {
+        value = static_cast<double>(literal[0]);
+    } else {
+        value = std::strtod(literal.c_str(), NULL);
+    }
 
     convertToChar(value);
     convertToInt(value);
