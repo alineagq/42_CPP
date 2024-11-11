@@ -1,30 +1,17 @@
-#ifndef BITCOIN_EXCHANGE_HPP
-#define BITCOIN_EXCHANGE_HPP
+#ifndef BITCOINEXCHANGE_HPP
+#define BITCOINEXCHANGE_HPP
 
 #include <string>
-#include <vector>
 #include <map>
 
 class BitcoinExchange {
 public:
-    BitcoinExchange();
-    ~BitcoinExchange();
-
-    bool loadData(const std::string& filename);
-    void processData(const std::string& inputFile);
+    BitcoinExchange(const std::string &databaseFile);
+    double getExchangeRate(const std::string &date) const;
 
 private:
-    struct PriceData {
-        std::string date;
-        double value;
-    };
-
-    std::vector<PriceData> prices;
-    std::map<std::string, double> bitcoinRates; // Map to store bitcoin rates by date
-
-    double findClosestRate(const std::string& date) const;
-    bool isValidDate(const std::string& date) const;
-    bool isValidValue(const std::string& value) const;
+    std::map<std::string, double> exchangeRates;
+    void loadDatabase(const std::string &databaseFile);
 };
 
-#endif // BITCOIN_EXCHANGE_HPP
+#endif
