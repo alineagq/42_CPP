@@ -41,6 +41,13 @@ public:
         return elements[index];
     }
 
+    const T& operator[](unsigned int index) const {
+        if (index >= length) {
+            throw std::out_of_range("Index out of bounds");
+        }
+        return elements[index];
+    }
+
     unsigned int size() const {
         return length;
     }

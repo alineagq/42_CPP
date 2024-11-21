@@ -1,29 +1,35 @@
 #include <iostream>
+#include <stdexcept>
 #include "Array.hpp"
 
 int main() {
-    Array<int> arr(5);
-
-    for (unsigned int i = 0; i < arr.size(); ++i) {
-        arr[i] = i * 2;
-    }
-
     try {
-        for (unsigned int i = 0; i < arr.size(); ++i) {
-            std::cout << arr[i] << " ";
+        Array<int> arr1;
+        std::cout << "Size of arr1: " << arr1.size() << std::endl;
+
+        Array<int> arr2(5);
+        std::cout << "Size of arr2: " << arr2.size() << std::endl;
+        arr2[0] = 10;
+        std::cout << "arr2[0] = " << arr2[0] << std::endl;
+
+        try {
+            std::cout << arr2[10] << std::endl;
+        } catch (const std::exception& e) {
+            std::cout << "Exception: " << e.what() << std::endl;
         }
-        std::cout << std::endl;
-        std::cout << arr[5] << std::endl; // This should throw an exception
+
+        Array<int> arr3 = arr2;
+        std::cout << "Size of arr3: " << arr3.size() << std::endl;
+        std::cout << "arr3[0] = " << arr3[0] << std::endl;
+
+        Array<int> arr4(3);
+        arr4 = arr2;
+        std::cout << "Size of arr4: " << arr4.size() << std::endl;
+        std::cout << "arr4[0] = " << arr4[0] << std::endl;
+
     } catch (const std::exception& e) {
-        std::cerr << e.what() << std::endl;
+        std::cout << "Error: " << e.what() << std::endl;
     }
-
-    Array<int> arr2 = arr;
-
-    for (unsigned int i = 0; i < arr2.size(); ++i) {
-        std::cout << arr2[i] << " ";
-    }
-    std::cout << std::endl;
 
     return 0;
 }
