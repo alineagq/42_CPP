@@ -18,5 +18,21 @@ int main() {
     std::cout << "min(c, d) = " << ::min(c, d) << std::endl;
     std::cout << "max(c, d) = " << ::max(c, d) << std::endl;
 
+    double e = 3.14;
+    double f = 4.20;
+
+    ::swap(e, f);
+    std::cout << "e = " << e << ", f = " << f << std::endl;
+    std::cout << "min(e, f) = " << ::min(e, f) << std::endl;
+    std::cout << "max(e, f) = " << ::max(e, f) << std::endl;
+
+    bool t = true;
+    bool x = false;
+
+    ::swap(t, x);
+    std::cout << "t = " << t << ", x = " << x << std::endl;
+    std::cout << "min(t, x) = " << ::min(t, x) << std::endl;
+    std::cout << "max(t, x) = " << ::max(t, x) << std::endl;
+
     return 0;
 }

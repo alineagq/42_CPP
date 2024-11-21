@@ -1,15 +1,22 @@
 CXX = c++
-CXXFLAGS = -std=c++98 -Wall -Wextra -Werror
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-all: main
+NAME = ex00
 
-main: main.o
-	$(CXX) $(CXXFLAGS) $^ -o $@
+SRCS = main.cpp
+OBJS = $(SRCS:.cpp=.o)
 
-main.o: main.cpp whatever.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJS)
 
 clean:
-	rm -f main main.o
+	rm -f $(OBJS)
 
-re: clean all
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re
