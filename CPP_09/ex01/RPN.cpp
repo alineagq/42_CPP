@@ -1,54 +1,70 @@
 #include "RPN.hpp"
-#include <stack>
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <iomanip>
+#include <stack>
 
-double RPN::evaluate(const std::string& expression) {
-    std::stack<double> operands;
+RPN::RPN(const std::string &expression) : expression(expression) {}
 
+RPN::RPN(const RPN &other) : expression(other.expression) {}
+
+RPN& RPN::operator=(const RPN &other) {
+    if (this != &other) {
+        expression = other.expression;
+    }
+    return *this;
+}
+
+RPN::~RPN() {}
+
+void RPN::evaluate() {
     std::istringstream iss(expression);
     std::string token;
+    std::stack<double> stack;
 
     while (iss >> token) {
-        if (isdigit(token[0])) {
-            operands.push(std::stod(token));
-        } else if (isOperator(token[0])) {
-            if (operands.size() < 2) {
-                throw std::runtime_error("Not enough operands for operator " + token);
+        if (is_operator(token)) {
+            if (stack.size() < 2) {
+                throw std::invalid_argument("Error: insufficient values in expression");
             }
-            double operand2 = operands.top();
-            operands.pop();
-            double operand1 = operands.top();
-            operands.pop();
-
-            double result;
-            switch (token[0]) {
-                case '+': result = operand1 + operand2; break;
-                case '-': result = operand1 - operand2; break;
-                case '*': result = operand1 * operand2; break;
-                case '/':
-                    if (operand2 == 0) {
-                        throw std::runtime_error("Division by zero");
-                    }
-                    result = operand1 / operand2;
-                    break;
-                default:
-                    throw std::runtime_error("Invalid operator: " + token);
-            }
-
-            operands.push(result);
+            double b = stack.top(); stack.pop();
+            double a = stack.top(); stack.pop();
+            double result = apply_operator(a, b, token);
+            stack.push(result);
         } else {
-            throw std::runtime_error("Invalid token: " + token);
+            double value;
+            std::istringstream(token) >> value;
+            if (iss.fail()) {
+                throw std::invalid_argument("Error: invalid token => " + token);
+            }
+            stack.push(value);
         }
     }
 
-    if (operands.size() != 1) {
-        throw std::runtime_error("Invalid expression");
+    if (stack.size() != 1) {
+        throw std::invalid_argument("Error: too many values in expression");
     }
 
-    return operands.top();
+    print_result(stack.top());
 }
 
-bool RPN::isOperator(char c) {
-    return c == '+' || c == '-' || c == '*' || c == '/';
+bool RPN::is_operator(const std::string &s) {
+    return (s == "+" || s == "-" || s == "*" || s == "/");
+}
+
+double RPN::apply_operator(double a, double b, const std::string &op) {
+    if (op == "+") return a + b;
+    if (op == "-") return a - b;
+    if (op == "*") return a * b;
+    if (op == "/") {
+        if (b == 0) throw std::invalid_argument("Error: division by zero");
+        return a / b;
+    }
+    throw std::invalid_argument("Error: unknown operator");
+}
+
+void RPN::print_result(double result) {
+    std::cout << std::fixed << std::setprecision(0);
+    std::cout << result << std::endl;
 }
