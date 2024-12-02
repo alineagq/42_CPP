@@ -1,24 +1,39 @@
-#ifndef PMERGE_ME_HPP
-#define PMERGE_ME_HPP
+// PmergeMe.hpp
+#ifndef PMERGEME_HPP
+#define PMERGEME_HPP
 
 #include <vector>
+#include <deque>
+#include <string>
+#include <ctime>
+#include <iostream>
+#include <iomanip>
+#include <cstdlib>
+#include <sstream>
+#include <algorithm> // Adicionado para std::sort
 
 class PmergeMe {
-public:
-    PmergeMe(const std::vector<int>& nums);
-
-    void sortContainer1();
-    void sortContainer2();
-
-    const std::vector<int>& getSortedContainer1() const;
-
 private:
-    std::vector<int> numbers;
-    std::vector<int> sortedContainer1;
-    std::vector<int> sortedContainer2;
+    std::vector<int> vec;
+    std::deque<int> deq;
+    std::vector<int> unsortedVec;
+    std::deque<int> unsortedDeq;
 
-    void mergeSort(std::vector<int>& arr);
-    void insertSort(std::vector<int>& arr);
+    // Helper function for Ford-Johnson algorithm
+    void fordJohnsonSort(std::vector<int> &container);
+    void fordJohnsonSort(std::deque<int> &container);
+
+    // Additional helper functions as needed
+
+public:
+    PmergeMe();
+    PmergeMe(const PmergeMe &other);
+    PmergeMe &operator=(const PmergeMe &other);
+    ~PmergeMe();
+
+    bool parseInput(int argc, char **argv);
+    void sortContainers();
+    void printResults();
 };
 
-#endif // PMERGE_ME_HPP
+#endif // PMERGEME_HPP
