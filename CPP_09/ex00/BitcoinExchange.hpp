@@ -41,10 +41,13 @@ public:
 
 class BitcoinExchange {
 private:
-    std::map<Date, double> exchangeRates;  // Mapa de Data -> Taxa de câmbio
+    std::map<Date, double> exchangeRates;
 
 public:
     BitcoinExchange(const std::string& databaseFile);
+    BitcoinExchange(const BitcoinExchange& other);
+    BitcoinExchange& operator=(const BitcoinExchange& other);
+    ~BitcoinExchange();
     void loadDatabase(const std::string& databaseFile);
     double getExchangeRate(const std::string& date) const;
 };

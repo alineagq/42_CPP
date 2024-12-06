@@ -80,6 +80,16 @@ BitcoinExchange::BitcoinExchange(const std::string &databaseFile) {
     loadDatabase(databaseFile);
 }
 
+BitcoinExchange::BitcoinExchange(const BitcoinExchange& other): exchangeRates(other.exchangeRates) {}
+
+BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other) {
+    if (this != &other) {
+        exchangeRates = other.exchangeRates;
+    }
+    return *this;
+}
+BitcoinExchange::~BitcoinExchange() {}
+
 void BitcoinExchange::loadDatabase(const std::string &databaseFile) {
     std::ifstream file(databaseFile.c_str());
     if (!file.is_open()) {
