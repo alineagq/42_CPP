@@ -1,10 +1,57 @@
-// PmergeMe.cpp
 #include "PmergeMe.hpp"
 
-// Constructor
+static void binaryInsert(std::vector<int> &sorted, int value) {
+    int left = 0;
+    int right = (int)sorted.size();
+    while (left < right) {
+        int mid = (left + right) / 2;
+        if (value < sorted[mid]) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    sorted.insert(sorted.begin() + left, value);
+}
+
+// Recursively apply Merge-Insertion sort
+static void mergeInsertionSort(std::vector<int> &arr) {
+    size_t n = arr.size();
+    if (n < 2) return;
+
+    std::vector< std::pair<int,int> > pairs;
+    pairs.reserve((n+1)/2);
+    for (size_t i = 0; i < n; i += 2) {
+        if (i + 1 < n) {
+            if (arr[i] > arr[i+1]) 
+                pairs.push_back(std::make_pair(arr[i+1], arr[i]));
+            else
+                pairs.push_back(std::make_pair(arr[i], arr[i+1]));
+        } else {
+            pairs.push_back(std::make_pair(arr[i], arr[i]));
+        }
+    }
+
+    std::vector<int> firsts;
+    firsts.reserve(pairs.size());
+    for (std::vector< std::pair<int,int> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
+        firsts.push_back(it->first);
+    }
+
+    mergeInsertionSort(firsts);
+
+    for (size_t i = 0; i < pairs.size(); ++i) {
+        if (pairs[i].first == pairs[i].second && (2*i+1 >= n)) {
+            continue;
+        }
+        binaryInsert(firsts, pairs[i].second);
+    }
+
+    arr = firsts;
+}
+
 PmergeMe::PmergeMe() {}
 
-// Copy Constructor
 PmergeMe::PmergeMe(const PmergeMe &other) {
     this->vec = other.vec;
     this->deq = other.deq;
@@ -12,7 +59,6 @@ PmergeMe::PmergeMe(const PmergeMe &other) {
     this->unsortedDeq = other.unsortedDeq;
 }
 
-// Assignment Operator
 PmergeMe &PmergeMe::operator=(const PmergeMe &other) {
     if (this != &other) {
         this->vec = other.vec;
@@ -23,49 +69,20 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &other) {
     return *this;
 }
 
-// Destructor
 PmergeMe::~PmergeMe() {}
 
-// Implementação simplificada do algoritmo de Ford-Johnson para std::vector
 void PmergeMe::fordJohnsonSort(std::vector<int> &container) {
-    // Implementação do algoritmo de Ford-Johnson
-    // Esta é uma versão simplificada e pode precisar ser aprimorada
-    if (container.empty()) return;
-
-    // Passo 1: Encontrar o mínimo e máximo
-    int min = container[0];
-    int max = container[0];
-    for (size_t i = 1; i < container.size(); ++i) {
-        if (container[i] < min) min = container[i];
-        if (container[i] > max) max = container[i];
-    }
-
-    // Passo 2: Ordenar usando uma abordagem personalizada
-    // Aqui, para simplificar, usamos std::sort apenas como placeholder
-    // Substituir por Ford-Johnson completo
-    std::sort(container.begin(), container.end());
+    mergeInsertionSort(container);
 }
 
-// Implementação simplificada do algoritmo de Ford-Johnson para std::deque
 void PmergeMe::fordJohnsonSort(std::deque<int> &container) {
-    // Implementação do algoritmo de Ford-Johnson
-    if (container.empty()) return;
-
-    // Passo 1: Encontrar o mínimo e máximo
-    int min = container[0];
-    int max = container[0];
-    for (size_t i = 1; i < container.size(); ++i) {
-        if (container[i] < min) min = container[i];
-        if (container[i] > max) max = container[i];
+    std::vector<int> temp(container.begin(), container.end());
+    mergeInsertionSort(temp);
+    for (size_t i = 0; i < temp.size(); ++i) {
+        container[i] = temp[i];
     }
-
-    // Passo 2: Ordenar usando uma abordagem personalizada
-    // Aqui, para simplificar, usamos std::sort apenas como placeholder
-    // Substituir por Ford-Johnson completo
-    std::sort(container.begin(), container.end());
 }
 
-// Parse and validate input
 bool PmergeMe::parseInput(int argc, char **argv) {
     if (argc < 2) {
         std::cerr << "Error: No input numbers provided." << std::endl;
@@ -74,20 +91,18 @@ bool PmergeMe::parseInput(int argc, char **argv) {
 
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
-        // Verificar se o argumento é um número
         for (size_t j = 0; j < arg.length(); ++j) {
-            if (!isdigit(arg[j])) {
+            if (!std::isdigit((unsigned char)arg[j])) {
                 std::cerr << "Error: Invalid number '" << arg << "'." << std::endl;
                 return false;
             }
         }
-        // Converter para inteiro e verificar o intervalo
-        long num = atol(arg.c_str());
-        if (num <= 0 || num > 2147483647) { // Assumindo int de 32 bits
+        long num = std::atol(arg.c_str());
+        if (num <= 0 || num > 2147483647L) {
             std::cerr << "Error: Number out of range '" << arg << "'." << std::endl;
             return false;
         }
-        int number = static_cast<int>(num);
+        int number = (int)num;
         vec.push_back(number);
         deq.push_back(number);
         unsortedVec.push_back(number);
@@ -96,29 +111,25 @@ bool PmergeMe::parseInput(int argc, char **argv) {
     return true;
 }
 
-// Sort both containers and measure time
 void PmergeMe::sortContainers() {
-    // Ordenar std::vector
     clock_t startVec = clock();
     fordJohnsonSort(vec);
     clock_t endVec = clock();
-    double timeVec = static_cast<double>(endVec - startVec) / CLOCKS_PER_SEC * 1000; // us
+    double timeVec = (double)(endVec - startVec) / CLOCKS_PER_SEC * 1000.0; // us
 
-    // Ordenar std::deque
     clock_t startDeq = clock();
     fordJohnsonSort(deq);
     clock_t endDeq = clock();
-    double timeDeq = static_cast<double>(endDeq - startDeq) / CLOCKS_PER_SEC * 1000; // us
+    double timeDeq = (double)(endDeq - startDeq) / CLOCKS_PER_SEC * 1000.0; // us
 
-    // Imprimir resultados
     std::cout << "Before: ";
     for (size_t i = 0; i < unsortedVec.size(); ++i) {
-        std::cout << unsortedVec[i] << (i != unsortedVec.size() - 1 ? " " : "\n");
+        std::cout << unsortedVec[i] << ((i != unsortedVec.size() - 1) ? " " : "\n");
     }
 
     std::cout << "After: ";
     for (size_t i = 0; i < vec.size(); ++i) {
-        std::cout << vec[i] << (i != vec.size() - 1 ? " " : "\n");
+        std::cout << vec[i] << ((i != vec.size() - 1) ? " " : "\n");
     }
 
     std::cout << "Time to process a range of " << vec.size() << " elements with std::vector : ";
