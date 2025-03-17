@@ -1,9 +1,9 @@
 #include "RPN.hpp"
-#include <iostream>
 #include <sstream>
 #include <stdexcept>
-#include <iomanip>
+#include <iostream>
 #include <stack>
+#include <cctype>
 
 RPN::RPN(const std::string &expression) : expression(expression) {}
 
@@ -21,50 +21,52 @@ RPN::~RPN() {}
 void RPN::evaluate() {
     std::istringstream iss(expression);
     std::string token;
-    std::stack<double> stack;
+    std::stack<int> stack;
 
     while (iss >> token) {
         if (is_operator(token)) {
             if (stack.size() < 2) {
-                throw std::invalid_argument("Error: insufficient values in expression");
+                throw std::exception();
             }
-            double b = stack.top(); stack.pop();
-            double a = stack.top(); stack.pop();
-            double result = apply_operator(a, b, token);
+            int b = stack.top(); stack.pop();
+            int a = stack.top(); stack.pop();
+            int result = apply_operator(a, b, token);
             stack.push(result);
         } else {
-            double value;
-            std::istringstream(token) >> value;
-            if (iss.fail()) {
-                throw std::invalid_argument("Error: invalid token => " + token);
+            if (token.find_first_not_of("0123456789") != std::string::npos) {
+                throw std::exception();
             }
-            stack.push(value);
+            int num;
+            std::istringstream iss(token);
+            if (!(iss >> num) || num < 0 || num > 9) {
+                throw std::exception();
+            }
+            stack.push(num);
         }
     }
 
     if (stack.size() != 1) {
-        throw std::invalid_argument("Error: too many values in expression");
+        throw std::exception();
     }
 
     print_result(stack.top());
 }
 
 bool RPN::is_operator(const std::string &s) {
-    return (s == "+" || s == "-" || s == "*" || s == "/");
+    return s == "+" || s == "-" || s == "*" || s == "/";
 }
 
-double RPN::apply_operator(double a, double b, const std::string &op) {
+int RPN::apply_operator(int a, int b, const std::string &op) {
     if (op == "+") return a + b;
     if (op == "-") return a - b;
     if (op == "*") return a * b;
     if (op == "/") {
-        if (b == 0) throw std::invalid_argument("Error: division by zero");
+        if (b == 0) throw std::exception();
         return a / b;
     }
-    throw std::invalid_argument("Error: unknown operator");
+    throw std::exception();
 }
 
-void RPN::print_result(double result) {
-    std::cout << std::fixed << std::setprecision(0);
+void RPN::print_result(int result) {
     std::cout << result << std::endl;
 }

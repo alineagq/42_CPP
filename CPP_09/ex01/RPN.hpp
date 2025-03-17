@@ -16,8 +16,8 @@ private:
     std::string expression;
 
     bool is_operator(const std::string &s);
-    double apply_operator(double a, double b, const std::string &op);
-    void print_result(double result);
+    int apply_operator(int a, int b, const std::string &op);
+    void print_result(int result);
 };
 
 #endif
