@@ -1,62 +1,93 @@
 #include "PmergeMe.hpp"
 
-static void binaryInsert(std::vector<int> &sorted, int value) {
-    int left = 0;
-    int right = (int)sorted.size();
-    while (left < right) {
-        int mid = (left + right) / 2;
-        if (value < sorted[mid]) {
-            right = mid;
-        } else {
-            left = mid + 1;
-        }
-    }
-    sorted.insert(sorted.begin() + left, value);
+void PmergeMe::binaryInsert(std::vector<int> &sorted, int value) {
+    std::vector<int>::iterator it = std::lower_bound(sorted.begin(), sorted.end(), value);
+    sorted.insert(it, value);
 }
 
-// Recursively apply Merge-Insertion sort
-static void mergeInsertionSort(std::vector<int> &arr) {
-    size_t n = arr.size();
-    if (n < 2) return;
+void PmergeMe::binaryInsertDeque(std::deque<int> &sorted, int value) {
+    std::deque<int>::iterator it = std::lower_bound(sorted.begin(), sorted.end(), value);
+    sorted.insert(it, value);
+}
 
-    std::vector< std::pair<int,int> > pairs;
-    pairs.reserve((n+1)/2);
-    for (size_t i = 0; i < n; i += 2) {
-        if (i + 1 < n) {
-            if (arr[i] > arr[i+1]) 
-                pairs.push_back(std::make_pair(arr[i+1], arr[i]));
-            else
-                pairs.push_back(std::make_pair(arr[i], arr[i+1]));
-        } else {
-            pairs.push_back(std::make_pair(arr[i], arr[i]));
-        }
+void PmergeMe::mergeInsertionSort(std::vector<int> &arr) {
+    if (arr.size() <= 1) return;
+
+    bool hasStraggler = (arr.size() % 2 != 0);
+    int straggler = 0;
+    if (hasStraggler) {
+        straggler = arr.back();
+        arr.pop_back();
     }
 
-    std::vector<int> firsts;
-    firsts.reserve(pairs.size());
-    for (std::vector< std::pair<int,int> >::iterator it = pairs.begin(); it != pairs.end(); ++it) {
-        firsts.push_back(it->first);
+    std::vector<std::pair<int, int> > pairs;
+    for (size_t i = 0; i < arr.size(); i += 2) {
+        int a = arr[i];
+        int b = arr[i + 1];
+        if (a > b) std::swap(a, b);
+        pairs.push_back(std::make_pair(a, b));
     }
 
-    mergeInsertionSort(firsts);
+    std::vector<int> mains;
+    for (size_t i = 0; i < pairs.size(); ++i)
+        mains.push_back(pairs[i].second);
 
-    for (size_t i = 0; i < pairs.size(); ++i) {
-        if (pairs[i].first == pairs[i].second && (2*i+1 >= n)) {
-            continue;
-        }
-        binaryInsert(firsts, pairs[i].second);
+    mergeInsertionSort(mains);
+
+    std::vector<int> pend;
+    for (size_t i = 0; i < pairs.size(); ++i)
+        pend.push_back(pairs[i].first);
+
+    for (size_t i = 0; i < pend.size(); ++i)
+        binaryInsert(mains, pend[i]);
+
+    if (hasStraggler)
+        binaryInsert(mains, straggler);
+
+    arr = mains;
+}
+
+void PmergeMe::mergeInsertionSortDeque(std::deque<int> &arr) {
+    if (arr.size() <= 1) return;
+
+    bool hasStraggler = (arr.size() % 2 != 0);
+    int straggler = 0;
+    if (hasStraggler) {
+        straggler = arr.back();
+        arr.pop_back();
     }
 
-    arr = firsts;
+    std::deque<std::pair<int, int> > pairs;
+    for (size_t i = 0; i < arr.size(); i += 2) {
+        int a = arr[i];
+        int b = arr[i + 1];
+        if (a > b) std::swap(a, b);
+        pairs.push_back(std::make_pair(a, b));
+    }
+
+    std::deque<int> mains;
+    for (size_t i = 0; i < pairs.size(); ++i)
+        mains.push_back(pairs[i].second);
+
+    mergeInsertionSortDeque(mains);
+
+    std::deque<int> pend;
+    for (size_t i = 0; i < pairs.size(); ++i)
+        pend.push_back(pairs[i].first);
+
+    for (size_t i = 0; i < pend.size(); ++i)
+        binaryInsertDeque(mains, pend[i]);
+
+    if (hasStraggler)
+        binaryInsertDeque(mains, straggler);
+
+    arr = mains;
 }
 
 PmergeMe::PmergeMe() {}
 
 PmergeMe::PmergeMe(const PmergeMe &other) {
-    this->vec = other.vec;
-    this->deq = other.deq;
-    this->unsortedVec = other.unsortedVec;
-    this->unsortedDeq = other.unsortedDeq;
+    *this = other;
 }
 
 PmergeMe &PmergeMe::operator=(const PmergeMe &other) {
@@ -76,11 +107,7 @@ void PmergeMe::fordJohnsonSort(std::vector<int> &container) {
 }
 
 void PmergeMe::fordJohnsonSort(std::deque<int> &container) {
-    std::vector<int> temp(container.begin(), container.end());
-    mergeInsertionSort(temp);
-    for (size_t i = 0; i < temp.size(); ++i) {
-        container[i] = temp[i];
-    }
+    mergeInsertionSortDeque(container);
 }
 
 bool PmergeMe::parseInput(int argc, char **argv) {
@@ -91,8 +118,12 @@ bool PmergeMe::parseInput(int argc, char **argv) {
 
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
+        if (arg.empty()) {
+            std::cerr << "Error: Empty argument." << std::endl;
+            return false;
+        }
         for (size_t j = 0; j < arg.length(); ++j) {
-            if (!std::isdigit((unsigned char)arg[j])) {
+            if (!std::isdigit(arg[j])) {
                 std::cerr << "Error: Invalid number '" << arg << "'." << std::endl;
                 return false;
             }
@@ -102,39 +133,42 @@ bool PmergeMe::parseInput(int argc, char **argv) {
             std::cerr << "Error: Number out of range '" << arg << "'." << std::endl;
             return false;
         }
-        int number = (int)num;
-        vec.push_back(number);
-        deq.push_back(number);
-        unsortedVec.push_back(number);
-        unsortedDeq.push_back(number);
+        vec.push_back(static_cast<int>(num));
+        deq.push_back(static_cast<int>(num));
+        unsortedVec.push_back(static_cast<int>(num));
+        unsortedDeq.push_back(static_cast<int>(num));
     }
     return true;
 }
 
+long long getMicroseconds() {
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return (long long)tv.tv_sec * 1000000 + tv.tv_usec;
+}
+
 void PmergeMe::sortContainers() {
-    clock_t startVec = clock();
-    fordJohnsonSort(vec);
-    clock_t endVec = clock();
-    double timeVec = (double)(endVec - startVec) / CLOCKS_PER_SEC * 1000.0; // us
+    std::vector<int> vecCopy = unsortedVec;
+    std::deque<int> deqCopy = unsortedDeq;
 
-    clock_t startDeq = clock();
-    fordJohnsonSort(deq);
-    clock_t endDeq = clock();
-    double timeDeq = (double)(endDeq - startDeq) / CLOCKS_PER_SEC * 1000.0; // us
+    long long startVec = getMicroseconds();
+    fordJohnsonSort(vecCopy);
+    long long timeVec = getMicroseconds() - startVec;
 
-    std::cout << "Before: ";
-    for (size_t i = 0; i < unsortedVec.size(); ++i) {
-        std::cout << unsortedVec[i] << ((i != unsortedVec.size() - 1) ? " " : "\n");
-    }
+    deqCopy = unsortedDeq;
+    
+    long long startDeq = getMicroseconds();
+    fordJohnsonSort(deqCopy);
+    long long timeDeq = getMicroseconds() - startDeq;
 
-    std::cout << "After: ";
-    for (size_t i = 0; i < vec.size(); ++i) {
-        std::cout << vec[i] << ((i != vec.size() - 1) ? " " : "\n");
-    }
-
-    std::cout << "Time to process a range of " << vec.size() << " elements with std::vector : ";
-    std::cout << std::fixed << std::setprecision(5) << timeVec << " us" << std::endl;
-
-    std::cout << "Time to process a range of " << deq.size() << " elements with std::deque : ";
-    std::cout << std::fixed << std::setprecision(5) << timeDeq << " us" << std::endl;
+    // Formatação ajustada para 5 casas decimais
+    std::cout << "Time to process a range of " << vec.size() 
+              << " elements with std::vector : "
+              << std::fixed << std::setprecision(5) 
+              << (timeVec / 1000000.0) << " s" << std::endl;
+    
+    std::cout << "Time to process a range of " << deq.size() 
+              << " elements with std::deque : "
+              << std::fixed << std::setprecision(5) 
+              << (timeDeq / 1000000.0) << " s" << std::endl;
 }

@@ -10,6 +10,7 @@
 #include <iomanip>
 #include <algorithm>
 #include <cctype>
+#include <sys/time.h>
 
 class PmergeMe {
 public:
@@ -20,14 +21,19 @@ public:
 
     bool parseInput(int argc, char **argv);
     void sortContainers();
-    void fordJohnsonSort(std::vector<int> &container);
-    void fordJohnsonSort(std::deque<int> &container);
 
 private:
     std::vector<int> vec;
     std::deque<int> deq;
     std::vector<int> unsortedVec;
     std::deque<int> unsortedDeq;
+
+    void fordJohnsonSort(std::vector<int> &container);
+    void fordJohnsonSort(std::deque<int> &container);
+    void mergeInsertionSort(std::vector<int> &arr);
+    void mergeInsertionSortDeque(std::deque<int> &arr);
+    void binaryInsert(std::vector<int> &sorted, int value);
+    void binaryInsertDeque(std::deque<int> &sorted, int value);
 };
 
 #endif
