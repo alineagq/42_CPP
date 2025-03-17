@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <iomanip>
 
 
 /*****************************************
@@ -52,9 +53,12 @@ bool Date::validate() const {
 }
 
 std::string Date::toString() const {
-    char buffer[11];
-    std::snprintf(buffer, sizeof(buffer), "%04d-%02d-%02d", year, month, day);
-    return std::string(buffer);
+    std::ostringstream oss;
+    oss << std::setfill('0')
+        << std::setw(4) << year << "-"
+        << std::setw(2) << month << "-"
+        << std::setw(2) << day;
+    return oss.str();
 }
 
 bool Date::operator<(const Date& other) const {
@@ -146,6 +150,8 @@ double BitcoinExchange::getExchangeRate(const std::string &date) const {
     it = exchangeRates.lower_bound(queryDate);
     if (it != exchangeRates.begin()) {
         --it;
+        return it->second;
+    } else if (it == exchangeRates.begin()) {
         return it->second;
     }
 

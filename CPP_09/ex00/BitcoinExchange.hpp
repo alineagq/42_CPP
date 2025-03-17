@@ -11,7 +11,6 @@
     Date class implementation
 *****************************************/
 
-
 class Date {
 private:
     int year;
@@ -31,8 +30,6 @@ public:
 
     bool operator<(const Date& other) const;
     bool operator==(const Date& other) const;
-
-    friend std::ostream& operator<<(std::ostream& os, const Date& date);
 };
 
 /*****************************************

@@ -53,7 +53,7 @@ int main(int argc, char **argv) {
 
         size_t delimiter_pos = line.find(" | ");
         if (delimiter_pos == std::string::npos) {
-            std::cerr << "Error: invalid file format (missing delimiter)." << std::endl;
+            std::cerr << "Error: bad input => " << line << std::endl;
             continue;
         }
 
@@ -73,9 +73,8 @@ int main(int argc, char **argv) {
 
         rate = exchange.getExchangeRate(dateStr);
 
-        if (rate > 0) {
+        if (rate >= 0) {
             double total = rate * bitcoinAmount;
-            std::cout << std::fixed << std::setprecision(2);
             std::cout << dateStr << " => " << bitcoinAmount << " = " << total << std::endl;
         } else {
             std::cerr << "Error: bad input => " << dateStr << std::endl;
